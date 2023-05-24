@@ -26,9 +26,19 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const myToyCollection = client.db('crazeToyDB').collection('myToy');
-    // Server route API
+    const myToyCollection = client.db('crazeToyDB').collection('myToys');
 
+    // Server route API
+    // All Electronics toys
+    app.post('/electronicsToy', async (req, res) => {
+      // const cursor = myToyCollection.find();
+      // const result = await cursor.toArray();
+      // res.send(result)
+      const body = req.body;
+      const result = await myToyCollection.insertOne(body);
+      console.log(result)
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -47,5 +57,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`ToyCraze Server is running on port ABC ${port}`);
+  console.log(`ToyCraze Server is running on port ${port}`);
 });
