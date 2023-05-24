@@ -3,7 +3,7 @@ const cors = require("cors");
 const port = process.env.PORT || 4000;
 const app = express();
 const { MongoClient, ServerApiVersion } = require("mongodb");
-require('dotenv').config()
+require("dotenv").config();
 
 // middleware
 app.use(cors());
@@ -26,19 +26,22 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const myToyCollection = client.db('crazeToyDB').collection('myToys');
+    const myToyCollection = client.db("crazeToyDB").collection("myToys");
 
     // Server route API
     // All Electronics toys
-    app.post('/electronicsToy', async (req, res) => {
-      // const cursor = myToyCollection.find();
-      // const result = await cursor.toArray();
-      // res.send(result)
+
+    app.get("/allToys", async (req, res) => {
+      const toys = await myToyCollection.find({}).toArray();
+      res.send(toys);
+    });
+
+    app.post("/electronicsToy", async (req, res) => {
       const body = req.body;
       const result = await myToyCollection.insertOne(body);
-      console.log(result)
-      res.send(result)
-    })
+      console.log(result);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
