@@ -36,6 +36,28 @@ async function run() {
       res.send(toys);
     });
 
+    /** 
+    app.get("/allToyByCategory/:category", async (req, res) => {
+      console.log(req.params);
+      const toys = await myToyCollection
+      .find({
+        subCategories: req.params.category,
+      })
+      .toArray();
+      res.send(toys);
+    });
+    */
+
+    app.get("/myToys/:email", async (req, res) => {
+      console.log(req.params.id);
+      const toys = await myToyCollection
+        .find({
+          email: req.params.email,
+        })
+        .toArray();
+      res.send(toys);
+    });
+
     app.post("/electronicsToy", async (req, res) => {
       const body = req.body;
       const result = await myToyCollection.insertOne(body);
