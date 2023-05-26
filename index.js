@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const port = process.env.PORT || 4000;
 const app = express();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 // middleware
@@ -47,7 +47,7 @@ async function run() {
       res.send(toys);
     });
     */
-
+    // My Toys Show
     app.get("/myToys/:email", async (req, res) => {
       console.log(req.params.id);
       const toys = await myToyCollection
@@ -61,10 +61,18 @@ async function run() {
     app.post("/electronicsToy", async (req, res) => {
       const body = req.body;
       const result = await myToyCollection.insertOne(body);
-      console.log(result);
       res.send(result);
     });
 
+    // My toys Delete
+    app.delete("/allToys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await myToyCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
