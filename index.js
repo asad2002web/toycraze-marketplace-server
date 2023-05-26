@@ -49,7 +49,6 @@ async function run() {
     */
     // My Toys Show
     app.get("/myToys/:email", async (req, res) => {
-      console.log(req.params.id);
       const toys = await myToyCollection
         .find({
           email: req.params.email,
@@ -64,7 +63,19 @@ async function run() {
       const result = await myToyCollection.findOne(query);
       res.send(result);
     });
-
+    // Search Route
+    app.get("/getToyByText/:text", async (req, res) => {
+      const text = req.params.text;
+      const result = await myToyCollection
+        .find({
+          $or: [
+            { name: { $regex: text, $options: "i" } },
+          ],
+        })
+        .toArray();
+      res.send(result);
+    });
+    // Create
     app.post("/electronicsToy", async (req, res) => {
       const body = req.body;
       const result = await myToyCollection.insertOne(body);
